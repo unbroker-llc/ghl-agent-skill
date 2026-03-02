@@ -106,6 +106,76 @@ cat > "$OUT_DIR/SYNC_META.json" <<EOF
 }
 EOF
 
+# ─── 7. Assemble SKILL.md ───────────────────────────────────────────────
+echo "==> Assembling SKILL.md..."
+SKILL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)/.kiro/skills/ghl-api"
+mkdir -p "$SKILL_DIR"
+SKILL="$SKILL_DIR/SKILL.md"
+
+cat > "$SKILL" <<'FRONTMATTER'
+---
+inclusion: manual
+name: ghl
+description: "GoHighLevel API v2 documentation — endpoints, auth, webhooks, and schemas"
+---
+
+# GHL API v2
+
+You are an expert on the GoHighLevel (GHL) API v2. All documentation below is auto-generated from the official GoHighLevel OpenAPI specs and guides at https://github.com/GoHighLevel/highlevel-api-docs.
+
+## Key Concepts
+
+- GHL uses OAuth 2.0 for authentication. Apps get access via the marketplace.
+- APIs are scoped — each endpoint requires specific OAuth scopes.
+- The API base URL is `https://services.leadconnectorhq.com`.
+- "Locations" are now called "Sub-Accounts" in the UI but the API still uses `locations`.
+- Most endpoints require either a `locationId` (sub-account) or work at the agency/company level.
+
+---
+
+FRONTMATTER
+
+# Append guides
+echo "# Guides" >> "$SKILL"
+echo "" >> "$SKILL"
+for f in "$OUT_DIR"/guides/*.md; do
+  [ -f "$f" ] || continue
+  echo "---" >> "$SKILL"
+  echo "" >> "$SKILL"
+  cat "$f" >> "$SKILL"
+  echo "" >> "$SKILL"
+done
+
+# Append API references
+echo "---" >> "$SKILL"
+echo "" >> "$SKILL"
+echo "# API Reference" >> "$SKILL"
+echo "" >> "$SKILL"
+for f in "$OUT_DIR"/api-reference/*.md; do
+  [ -f "$f" ] || continue
+  echo "---" >> "$SKILL"
+  echo "" >> "$SKILL"
+  cat "$f" >> "$SKILL"
+  echo "" >> "$SKILL"
+done
+
+# Append webhook events
+echo "---" >> "$SKILL"
+echo "" >> "$SKILL"
+echo "# Webhook Events" >> "$SKILL"
+echo "" >> "$SKILL"
+for f in "$OUT_DIR"/webhook-events/*.md; do
+  [ -f "$f" ] || continue
+  echo "---" >> "$SKILL"
+  echo "" >> "$SKILL"
+  cat "$f" >> "$SKILL"
+  echo "" >> "$SKILL"
+done
+
+SKILL_SIZE=$(wc -c < "$SKILL" | tr -d ' ')
+echo "    SKILL.md assembled ($(( SKILL_SIZE / 1024 )) KB)"
+
 echo ""
 echo "==> Done! Docs written to $OUT_DIR"
+echo "    SKILL.md written to $SKILL"
 echo "    Source commit: $COMMIT_SHA"
