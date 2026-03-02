@@ -1,3 +1,5 @@
+[![Sync GoHighLevel API Docs](https://github.com/unbroker-llc/ghl-agent-skill/actions/workflows/sync-ghl-docs.yml/badge.svg?branch=main)](https://github.com/unbroker-llc/ghl-agent-skill/actions/workflows/sync-ghl-docs.yml)
+
 # GoHighLevel API — Kiro Skill
 
 A [Kiro](https://kiro.dev) skill that provides LLM-friendly access to the [GoHighLevel API v2](https://github.com/GoHighLevel/highlevel-api-docs) documentation.
