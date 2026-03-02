@@ -14,8 +14,10 @@ A [Kiro](https://kiro.dev) skill that provides LLM-friendly access to the [GoHig
 Run the sync script once to populate `ghl-docs/`:
 
 ```bash
-bash scripts/sync-ghl-docs.sh
+bash -i scripts/sync-ghl-docs.sh
 ```
+
+The `-i` flag ensures interactive shell init runs (needed if your Node.js is managed by fnm, nvm, etc.). On CI (GitHub Actions), node is in PATH already so this isn't needed.
 
 After that, the weekly GitHub Action keeps it current.
 
