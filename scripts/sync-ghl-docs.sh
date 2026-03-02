@@ -59,6 +59,34 @@ done
 # ─── 4. Copy common schemas ─────────────────────────────────────────────
 cp "$SRC/common/common-schemas.json" "$OUT_DIR/" 2>/dev/null || true
 
+# ─── 4b. Apply overrides ────────────────────────────────────────────────
+OVERRIDES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)/overrides"
+if [ -d "$OVERRIDES_DIR" ]; then
+  echo "==> Applying overrides..."
+  find "$OVERRIDES_DIR" -name '*.md' -type f | while read -r override; do
+    # Get the relative path under overrides/, e.g. api-reference/proposals.md
+    rel="${override#$OVERRIDES_DIR/}"
+    target="$OUT_DIR/$rel"
+    if [ -f "$target" ]; then
+      {
+        echo ""
+        echo "---"
+        echo ""
+        echo "# OVERRIDES"
+        echo ""
+        echo "> The following corrections and additions override inaccurate or incomplete"
+        echo "> information in the auto-generated docs above. When conflicts exist between"
+        echo "> the above content and the overrides below, the overrides are authoritative."
+        echo ""
+        cat "$override"
+      } >> "$target"
+      echo "    ✓ override applied: $rel"
+    else
+      echo "    ⚠ no target for override: $rel (skipped)"
+    fi
+  done
+fi
+
 # ─── 5. Generate index ──────────────────────────────────────────────────
 echo "==> Generating index..."
 INDEX="$OUT_DIR/INDEX.md"

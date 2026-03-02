@@ -25,4 +25,16 @@ After that, the weekly GitHub Action keeps it current.
 
 ## Usage in Kiro
 
-In any Kiro chat, type `#ghl` to activate the skill, then ask about any ghl topic — endpoints, auth flows, webhook payloads, scopes, etc.
+In any Kiro chat, type `#ghl` to activate the skill, then ask about any GHL topic — endpoints, auth flows, webhook payloads, scopes, etc.
+
+## Overrides
+
+The upstream GHL docs sometimes have inaccurate or incomplete information. To correct this, add markdown files under `overrides/` mirroring the `ghl-docs/` structure. For example:
+
+```
+overrides/api-reference/proposals.md  →  appended to ghl-docs/api-reference/proposals.md
+overrides/guides/Authorization.md     →  appended to ghl-docs/guides/Authorization.md
+overrides/webhook-events/ContactCreate.md → appended to ghl-docs/webhook-events/ContactCreate.md
+```
+
+Override content is appended under an `# OVERRIDES` heading with a note that it takes precedence over the auto-generated content above it. Overrides are preserved across syncs since they live outside `ghl-docs/`.
